@@ -3,3 +3,4 @@ dist
 app-gym-pass.md
 .npmrc
 .env
+coverage
