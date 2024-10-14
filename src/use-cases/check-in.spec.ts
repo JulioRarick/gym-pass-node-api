@@ -5,26 +5,27 @@ import { InMemoryCheckInsRepository } from '@/repositories/in-memory/in-memory-c
 import { InMemoryGymsRepository } from '@/repositories/in-memory/in-memory-gyms-repository'
 
 import { CheckInUseCase } from './check-in'
+import { MaxCheckInsError } from './error/max-check-ins'
+import { MaxDistanceError } from './error/max-distance-error'
 
 let checkInsRepository: InMemoryCheckInsRepository
 let checkInUseCase: CheckInUseCase
 let gymsRepository: InMemoryGymsRepository
 
 describe('Check In (use-case)', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     checkInsRepository = new InMemoryCheckInsRepository()
     gymsRepository = new InMemoryGymsRepository()
     checkInUseCase = new CheckInUseCase(checkInsRepository, gymsRepository)
 
     vi.useFakeTimers()
 
-    gymsRepository.gyms.push({
-      id: 'fake-gym-id',
+    await gymsRepository.create({
       title: 'Fake Gym',
       description: 'Fake Gym Description',
       phone: '61999999999',
-      latitude: new Decimal(-15.8272657),
-      longitude: new Decimal(-48.0509952),
+      latitude: -15.8272657,
+      longitude: -48.0509952,
     })
   })
 
@@ -64,7 +65,7 @@ describe('Check In (use-case)', () => {
         userLatitude: -15.8272657,
         userLongitude: -48.0509952,
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(MaxCheckInsError)
   })
 
   it('should be able to check in twice but in different date', async () => {
@@ -106,6 +107,6 @@ describe('Check In (use-case)', () => {
         userLatitude: -15.8272657,
         userLongitude: -48.0509952,
       }),
-    ).rejects.toBeInstanceOf(Error)
+    ).rejects.toBeInstanceOf(MaxDistanceError)
   })
 })
