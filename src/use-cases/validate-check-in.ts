@@ -1,8 +1,10 @@
 import { CheckIn } from '@prisma/client'
+import dayjs from 'dayjs'
 
 import { CheckInsRepository } from '@/repositories/check-ins-repository'
 
 import { ResourceNotExistsError } from './error/resource-not-exists-error'
+import { TimeExpirationValidateCheckIn } from './error/time-expiration-validate-check-in'
 
 interface ValidateCheckInUseCaseRequest {
   checkInId: string
@@ -22,6 +24,15 @@ export class ValidateCheckInUseCase {
 
     if (!checkIn) {
       throw new ResourceNotExistsError()
+    }
+
+    const distanceInMinutesFromCheckInCreation = dayjs(new Date()).diff(
+      checkIn.created_at,
+      'minute',
+    )
+
+    if (distanceInMinutesFromCheckInCreation > 30) {
+      throw new TimeExpirationValidateCheckIn()
     }
 
     checkIn.validated_at = new Date()
