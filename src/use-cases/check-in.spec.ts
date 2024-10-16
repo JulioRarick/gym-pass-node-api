@@ -21,6 +21,7 @@ describe('Check In (use-case)', () => {
     vi.useFakeTimers()
 
     await gymsRepository.create({
+      id: 'fake-gym-id',
       title: 'Fake Gym',
       description: 'Fake Gym Description',
       phone: '61999999999',
