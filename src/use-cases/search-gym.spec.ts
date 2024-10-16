@@ -21,6 +21,13 @@ describe('Search Gym (use-case)', () => {
       latitude: Math.random(),
       longitude: Math.random(),
     })
+    await gymsRepository.create({
+      title: 'Gym 2',
+      description: 'Description 1',
+      phone: 'Phone 1',
+      latitude: Math.random(),
+      longitude: Math.random(),
+    })
 
     const { gyms } = await searchGymsUseCase.execute({
       query: 'Gym 1',
