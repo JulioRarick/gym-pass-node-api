@@ -12,7 +12,7 @@ describe('Search Gym Controller', () => {
   afterEach(async () => {
     await app.close()
   })
-  it('should be able to search gym by query', async () => {
+  it('should be able to list nearby gyms', async () => {
     const { token } = await registerAndAuthenticateUser(app)
 
     for (let i = 1; i <= 3; i++) {
@@ -35,20 +35,21 @@ describe('Search Gym Controller', () => {
         title: 'JavaScript',
         description: 'Gym 01 description',
         phone: '123456789',
-        latitude: -15.8272657,
-        longitude: -48.0509952,
+        latitude: Math.random() * 10,
+        longitude: Math.random() * 10,
       })
 
-    const queryGym = await request(app.server)
-      .get('/gyms/search')
+    const queryGyms = await request(app.server)
+      .get('/gyms/nearby')
       .set('Authorization', `Bearer ${token}`)
       .query({
-        query: 'Gym 1',
+        latitude: -15.8272654,
+        longitude: -48.0509954,
       })
 
-    expect(queryGym.statusCode).toEqual(200)
-    expect(queryGym.body.gyms).toHaveLength(1)
+    expect(queryGyms.statusCode).toEqual(200)
+    expect(queryGyms.body.gyms).toHaveLength(3)
 
-    expect(queryGym.body.gyms[0].title).toEqual('Gym 1')
+    expect(queryGyms.body.gyms[0].title).toEqual('Gym 1')
   })
 })
