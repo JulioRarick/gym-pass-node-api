@@ -2,6 +2,7 @@ import request from 'supertest'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import { app } from '@/app'
+import { registerAndAuthenticateUser } from '@/utils/test/register-and-authenticate-user'
 
 describe('Search Gym Controller', () => {
   beforeEach(async () => {
@@ -12,21 +13,7 @@ describe('Search Gym Controller', () => {
     await app.close()
   })
   it('should be able to search gym by query', async () => {
-    await request(app.server).post('/users').send({
-      name: 'Julio Rarick',
-      email: 'juliorarick@test.example',
-      password: '123456',
-    })
-    const userAuthenticatedResponse = await request(app.server)
-      .post('/sessions')
-      .send({
-        email: 'juliorarick@test.example',
-        password: '123456',
-      })
-
-    console.log(userAuthenticatedResponse.body)
-
-    const { token } = userAuthenticatedResponse.body
+    const { token } = await registerAndAuthenticateUser(app)
 
     for (let i = 1; i <= 3; i++) {
       await request(app.server)
