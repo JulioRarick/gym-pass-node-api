@@ -13,7 +13,7 @@ describe('Search Gym Controller', () => {
     await app.close()
   })
   it('should be able to list nearby gyms', async () => {
-    const { token } = await registerAndAuthenticateUser(app)
+    const { token } = await registerAndAuthenticateUser(app, true)
 
     for (let i = 1; i <= 3; i++) {
       await request(app.server)
@@ -23,8 +23,8 @@ describe('Search Gym Controller', () => {
           title: `Gym ${i}`,
           description: `Gym ${i} description`,
           phone: '123456789',
-          latitude: -15.8272657,
-          longitude: -48.0509952,
+          latitude: -15.8272653,
+          longitude: -48.0509953,
         })
     }
 
@@ -48,6 +48,7 @@ describe('Search Gym Controller', () => {
       })
 
     expect(queryGyms.statusCode).toEqual(200)
+
     expect(queryGyms.body.gyms).toHaveLength(3)
 
     expect(queryGyms.body.gyms[0].title).toEqual('Gym 1')

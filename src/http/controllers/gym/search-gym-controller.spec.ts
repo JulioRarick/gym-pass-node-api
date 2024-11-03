@@ -13,7 +13,7 @@ describe('Search Gym Controller', () => {
     await app.close()
   })
   it('should be able to search gym by query', async () => {
-    const { token } = await registerAndAuthenticateUser(app)
+    const { token } = await registerAndAuthenticateUser(app, true)
 
     for (let i = 1; i <= 3; i++) {
       await request(app.server)

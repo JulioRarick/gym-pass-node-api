@@ -14,7 +14,8 @@ describe('Create Gym Controller', () => {
   })
 
   it('should be able to create a gym', async () => {
-    const { token } = await registerAndAuthenticateUser(app)
+    const { token } = await registerAndAuthenticateUser(app, true)
+
     const response = await request(app.server)
       .post('/gyms')
       .set('Authorization', `Bearer ${token}`)
@@ -22,8 +23,8 @@ describe('Create Gym Controller', () => {
         title: 'Gym 01',
         description: 'Description Gym 01',
         phone: '123456789',
-        latitude: Math.random(),
-        longitude: Math.random(),
+        latitude: -15.8272653,
+        longitude: -48.0509953,
       })
 
     expect(response.statusCode).toEqual(201)

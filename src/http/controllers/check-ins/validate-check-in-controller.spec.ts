@@ -14,7 +14,7 @@ describe('Validate Check-In Controller', () => {
   })
 
   it('should be able to get metrics user check ins', async () => {
-    const { token } = await registerAndAuthenticateUser(app)
+    const { token } = await registerAndAuthenticateUser(app, true)
 
     const user = await prisma.user.findFirstOrThrow()
 
